@@ -49,14 +49,14 @@ export const SettingDialog = ({open, setOpen, updateName, saveSettings}: Setting
 
     return (
         <Dialog open={open} onClose={() => setOpen(false)} maxWidth={'xs'} fullWidth>
-            <DialogTitle>Settings</DialogTitle>
+            <DialogTitle>设置</DialogTitle>
             <DialogContent>
                 <form onSubmit={doSubmit}>
                     <Box paddingBottom={1}>
                         <TextField
                             autoFocus
                             margin="dense"
-                            label="Username"
+                            label="用户名"
                             value={name}
                             onChange={(e) =>
                                 setSettingsInput((c) => ({...c, name: e.target.value}))
@@ -83,7 +83,7 @@ export const SettingDialog = ({open, setOpen, updateName, saveSettings}: Setting
                                     }))
                                 }
                                 renderInput={(params) => (
-                                    <TextField {...params} label="Preferred Codec" />
+                                    <TextField {...params} label="编码解释器" />
                                 )}
                             />
                         </Box>
@@ -99,12 +99,12 @@ export const SettingDialog = ({open, setOpen, updateName, saveSettings}: Setting
                             }
                             value={displayMode}
                             fullWidth
-                            renderInput={(params) => <TextField {...params} label="Display Mode" />}
+                            renderInput={(params) => <TextField {...params} label="显示模式" />}
                         />
                     </Box>
                     <Box paddingTop={1}>
                         <NumberField
-                            label="FrameRate"
+                            label="帧率"
                             min={1}
                             onChange={(framerate) => setSettingsInput((c) => ({...c, framerate}))}
                             value={framerate}
@@ -115,10 +115,10 @@ export const SettingDialog = ({open, setOpen, updateName, saveSettings}: Setting
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => setOpen(false)} color="primary">
-                    Cancel
+                    取消
                 </Button>
                 <Button onClick={doSubmit} color="primary">
-                    Save
+                    保存
                 </Button>
             </DialogActions>
         </Dialog>

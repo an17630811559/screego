@@ -38,7 +38,7 @@ const CreateRoom = ({room, config}: Pick<UseRoom, 'room'> & {config: UIConfig}) 
                     fullWidth
                     value={id}
                     onChange={(e) => setId(e.target.value)}
-                    label="id"
+                    label="用户名"
                     margin="dense"
                 />
                 <FormControlLabel
@@ -48,7 +48,7 @@ const CreateRoom = ({room, config}: Pick<UseRoom, 'room'> & {config: UIConfig}) 
                             onChange={(_, checked) => setOwnerLeave(checked)}
                         />
                     }
-                    label="Close Room after you leave"
+                    label="离开后关闭房间"
                 />
                 <Box paddingBottom={0.5}>
                     <Typography>
@@ -63,7 +63,7 @@ const CreateRoom = ({room, config}: Pick<UseRoom, 'room'> & {config: UIConfig}) 
                     </Typography>
                 </Box>
                 <Button onClick={submit} fullWidth variant="contained">
-                    Create or Join a Room
+                    创建或加入房间
                 </Button>
             </FormControl>
         </div>
@@ -96,7 +96,7 @@ export const RoomManage = ({room, config}: {room: FCreateRoom; config: UseConfig
                     ) : (
                         <>
                             <Typography style={{display: 'flex', alignItems: 'center'}}>
-                                <span style={{flex: 1}}>Hello {config.user}!</span>{' '}
+                                <span style={{flex: 1}}>欢迎 {config.user}!</span>{' '}
                                 {config.loggedIn ? (
                                     <Button variant="outlined" size="small" onClick={config.logout}>
                                         Logout
@@ -107,7 +107,7 @@ export const RoomManage = ({room, config}: {room: FCreateRoom; config: UseConfig
                                         size="small"
                                         onClick={() => setShowLogin(true)}
                                     >
-                                        Login
+                                        登 录
                                     </Button>
                                 )}
                             </Typography>
@@ -117,10 +117,10 @@ export const RoomManage = ({room, config}: {room: FCreateRoom; config: UseConfig
                     )}
                 </Paper>
             </Grid>
-            <div style={{position: 'absolute', margin: '0 auto', bottom: 0}}>
+            {/*<div style={{position: 'absolute', margin: '0 auto', bottom: 0}}>
                 Screego {config.version} |{' '}
                 <Link href="https://github.com/screego/server/">GitHub</Link>
-            </div>
+            </div>*/}
         </Grid>
     );
 };

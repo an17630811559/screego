@@ -78,7 +78,7 @@ const Snackbar: React.FC<React.PropsWithChildren> = ({children}) => {
             ref={notistackRef}
             action={(key) => (
                 <Button onClick={onClickDismiss(key)} size="small">
-                    Dismiss
+                    关闭
                 </Button>
             )}
         >

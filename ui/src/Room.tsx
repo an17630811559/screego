@@ -4,6 +4,8 @@ import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
 import PresentToAllIcon from '@mui/icons-material/PresentToAll';
 import FullScreenIcon from '@mui/icons-material/Fullscreen';
 import PeopleIcon from '@mui/icons-material/People';
+import HeadsetIcon from '@mui/icons-material/Headset';
+import HeadsetOff from '@mui/icons-material/HeadsetOff';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {useHotkeys} from 'react-hotkeys-hook';
 import {Video} from './Video';
@@ -70,6 +72,8 @@ export const Room = ({
     const [hoverControl, setHoverControl] = React.useState(false);
     const [selectedStream, setSelectedStream] = React.useState<string | typeof HostStream>();
     const [videoElement, setVideoElement] = React.useState<FullScreenHTMLVideoElement | null>(null);
+    const audioElementRef = React.useRef<HTMLAudioElement | null>(null);
+    const [playingAudio, setPlayingAudio] = React.useState(false);
 
     useShowOnMouseMovement(setShowControl);
 
@@ -89,17 +93,30 @@ export const Room = ({
         setSelectedStream(state.clientStreams[0]?.id);
     }, [state.clientStreams, selectedStream, state.hostStream]);
 
-    const stream =
+    const videoStream  =
         selectedStream === HostStream
             ? state.hostStream
             : state.clientStreams.find(({id}) => selectedStream === id)?.stream;
+    const audioStream =
+        state.clientStreams.find(({id, stream}) => selectedStream === id && stream.getAudioTracks().length != 0 )?.stream;
 
     React.useEffect(() => {
-        if (videoElement && stream) {
-            videoElement.srcObject = stream;
+        if (videoElement && videoStream) {
+            videoElement.srcObject = videoStream;
             videoElement.play().catch((e) => console.log('Could not play main video', e));
         }
-    }, [videoElement, stream]);
+    }, [videoElement, videoStream]);
+
+    React.useEffect(() => {
+        if (audioElementRef.current && audioStream) {
+            audioElementRef.current.srcObject = audioStream;
+        }
+        if (playingAudio) {
+            playAudio();
+        } else {
+            pauseAudio();
+        }
+    }, [audioElementRef, audioStream]);
 
     const copyLink = () => {
         navigator?.clipboard?.writeText(window.location.href)?.then(
@@ -115,6 +132,32 @@ export const Room = ({
         }),
         [setHoverControl]
     );
+
+    const playAudio = () => {
+        if (audioElementRef.current) {
+            audioElementRef.current.play().then(() => {
+                setPlayingAudio(true);
+            }).catch((e) => {
+                console.log('Could not play main audio', e);
+            });
+        }
+    }
+    const pauseAudio = () => {
+        if (audioElementRef.current) {
+            audioElementRef.current.pause();
+            setPlayingAudio(false);
+        }
+    }
+
+    const toggleAudio = () => {
+        if (playingAudio) {
+            pauseAudio();
+        } else {
+            playAudio();
+        }
+    }
+
+    const audioButtonVisible = audioStream && selectedStream !== HostStream;
 
     const controlVisible = showControl || open || hoverControl;
 
@@ -162,6 +205,8 @@ export const Room = ({
         [state.clientStreams, selectedStream]
     );
 
+    useHotkeys('a', toggleAudio, [playingAudio]);
+
     const videoClasses = () => {
         switch (settings.displayMode) {
             case VideoDisplayMode.FitToWindow:
@@ -192,7 +237,7 @@ export const Room = ({
                 </Paper>
             )}
 
-            {stream ? (
+            {videoStream ? (
                 <video
                     muted
                     ref={setVideoElement}
@@ -211,8 +256,15 @@ export const Room = ({
                         transform: 'translate(-50%, -50%)',
                     }}
                 >
-                    no stream available
+                    没有可用的流
                 </Typography>
+            )}
+
+            {audioStream && (
+                <audio
+                    ref={audioElementRef}
+                    style={{ display: 'none' }}
+                />
             )}
 
             {controlVisible && (
@@ -224,7 +276,7 @@ export const Room = ({
                             </IconButton>
                         </Tooltip>
                     ) : (
-                        <Tooltip title="Start Presentation" arrow>
+                        <Tooltip title="开始演示" arrow>
                             <IconButton onClick={share} size="large">
                                 <PresentToAllIcon fontSize="large" />
                             </IconButton>
@@ -235,7 +287,7 @@ export const Room = ({
                         classes={{tooltip: classes.noMaxWidth}}
                         title={
                             <div>
-                                <Typography variant="h5">Member List</Typography>
+                                <Typography variant="h5">用户列表</Typography>
                                 {state.users.map((user) => (
                                     <Typography key={user.id}>
                                         {user.name} {flags(user)}
@@ -249,6 +301,16 @@ export const Room = ({
                             <PeopleIcon fontSize="large" />
                         </Badge>
                     </Tooltip>
+
+                    {audioButtonVisible && <Tooltip title={playingAudio ? "关闭声音" : "播放声音"} arrow>
+                        <IconButton
+                            onClick={toggleAudio}
+                            size="large"
+                        >
+                            {playingAudio ? <HeadsetIcon fontSize="large" /> : <HeadsetOff fontSize="large" />}
+                        </IconButton>
+                    </Tooltip>}
+
                     <Tooltip title="Fullscreen" arrow>
                         <IconButton
                             onClick={() => handleFullscreen()}
@@ -259,7 +321,7 @@ export const Room = ({
                         </IconButton>
                     </Tooltip>
 
-                    <Tooltip title="Settings" arrow>
+                    <Tooltip title="设置" arrow>
                         <IconButton onClick={() => setOpen(true)} size="large">
                             <SettingsIcon fontSize="large" />
                         </IconButton>
@@ -278,11 +340,13 @@ export const Room = ({
                                 className={classes.smallVideoContainer}
                                 onClick={() => setSelectedStream(client.id)}
                             >
-                                <Video
-                                    key={client.id}
-                                    src={client.stream}
-                                    className={classes.smallVideo}
-                                />
+                                {
+                                    client.stream && <Video
+                                        key={client.id}
+                                        src={client.stream}
+                                        className={classes.smallVideo}
+                                    />
+                                }
                                 <Typography
                                     variant="subtitle1"
                                     component="div"
