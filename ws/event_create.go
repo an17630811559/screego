@@ -48,11 +48,11 @@ func (e *Create) Execute(rooms *Rooms, current ClientInfo) error {
 	case config.AuthModeNone:
 	case config.AuthModeAll:
 		if !current.Authenticated {
-			return errors.New("you need to login")
+			return errors.New("请先登录")
 		}
 	case config.AuthModeTurn:
 		if e.Mode != ConnectionSTUN && e.Mode != ConnectionLocal && !current.Authenticated {
-			return errors.New("you need to login")
+			return errors.New("请先登录")
 		}
 	default:
 		return errors.New("invalid authmode:" + rooms.config.AuthMode)

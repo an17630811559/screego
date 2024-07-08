@@ -45,10 +45,10 @@ export const useConfig = (): UseConfig => {
     const logout = async () => {
         const result = await fetch(`${urlWithSlash}logout`, {method: 'POST'});
         if (result.status !== 200) {
-            enqueueSnackbar('Logout Failed: ' + (await result.text()), {variant: 'error'});
+            enqueueSnackbar('注销登录失败: ' + (await result.text()), {variant: 'error'});
         } else {
             await refetch();
-            enqueueSnackbar('Logged Out.', {variant: 'success'});
+            enqueueSnackbar('注销登录', {variant: 'success'});
         }
     };
 

@@ -311,7 +311,7 @@ export const Room = ({
                         </IconButton>
                     </Tooltip>}
 
-                    <Tooltip title="Fullscreen" arrow>
+                    <Tooltip title="全屏" arrow>
                         <IconButton
                             onClick={() => handleFullscreen()}
                             disabled={!selectedStream}

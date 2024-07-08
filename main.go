@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	version    = "unknown"
+	version    = "1.0.0"
 	commitHash = "unknown"
 	mode       = pmode.Dev
 )
