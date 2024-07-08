@@ -117,10 +117,10 @@ export const RoomManage = ({room, config}: {room: FCreateRoom; config: UseConfig
                     )}
                 </Paper>
             </Grid>
-            {/*<div style={{position: 'absolute', margin: '0 auto', bottom: 0}}>
+            <div style={{position: 'absolute', margin: '0 auto', bottom: 0}}>
                 Screego {config.version} |{' '}
-                <Link href="https://github.com/screego/server/">GitHub</Link>
-            </div>*/}
+                <span>汉化、增加音频共享: awb</span>
+            </div>
         </Grid>
     );
 };
