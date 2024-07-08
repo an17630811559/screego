@@ -33,7 +33,7 @@ func (e *Create) Execute(rooms *Rooms, current ClientInfo) error {
 			return join.Execute(rooms, current)
 		}
 
-		return fmt.Errorf("room with id %s does already exist", e.ID)
+		return fmt.Errorf("房间 id %s does already exist", e.ID)
 	}
 
 	name := e.UserName

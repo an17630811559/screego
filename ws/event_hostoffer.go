@@ -22,7 +22,7 @@ func (e *HostOffer) Execute(rooms *Rooms, current ClientInfo) error {
 
 	room, ok := rooms.Rooms[current.RoomID]
 	if !ok {
-		return fmt.Errorf("room with id %s does not exist", current.RoomID)
+		return fmt.Errorf("房间 id %s 不存在", current.RoomID)
 	}
 
 	session, ok := room.Sessions[e.SID]

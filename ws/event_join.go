@@ -17,12 +17,12 @@ type Join struct {
 
 func (e *Join) Execute(rooms *Rooms, current ClientInfo) error {
 	if current.RoomID != "" {
-		return fmt.Errorf("cannot join room, you are already in one")
+		return fmt.Errorf("无法加入房间，您已在其中")
 	}
 
 	room, ok := rooms.Rooms[e.ID]
 	if !ok {
-		return fmt.Errorf("room with id %s does not exist", e.ID)
+		return fmt.Errorf("房间 id %s 不存在", e.ID)
 	}
 	name := e.UserName
 	if current.Authenticated {

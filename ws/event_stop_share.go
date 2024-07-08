@@ -22,7 +22,7 @@ func (e *StopShare) Execute(rooms *Rooms, current ClientInfo) error {
 
 	room, ok := rooms.Rooms[current.RoomID]
 	if !ok {
-		return fmt.Errorf("room with id %s does not exist", current.RoomID)
+		return fmt.Errorf("房间 id %s 不存在", current.RoomID)
 	}
 
 	room.Users[current.ID].Streaming = false

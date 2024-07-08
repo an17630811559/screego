@@ -81,7 +81,7 @@ func (u *Users) CurrentUser(r *http.Request) (string, bool) {
 	s, _ := u.store.Get(r, "user")
 	user, ok := s.Values["user"].(string)
 	if !ok {
-		return "guest", ok
+		return "访客", ok
 	}
 	return user, ok
 }
