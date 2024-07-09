@@ -7,14 +7,19 @@ import PeopleIcon from '@mui/icons-material/People';
 import HeadsetIcon from '@mui/icons-material/Headset';
 import HeadsetOff from '@mui/icons-material/HeadsetOff';
 import SettingsIcon from '@mui/icons-material/Settings';
+import AspectRatio from '@mui/icons-material/AspectRatio';
 import {useHotkeys} from 'react-hotkeys-hook';
 import {Video} from './Video';
+import ReactPlayer from 'react-player'
 import makeStyles from '@mui/styles/makeStyles';
 import {ConnectedRoom} from './useRoom';
 import {useSnackbar} from 'notistack';
 import {RoomUser} from './message';
 import {useSettings, VideoDisplayMode} from './settings';
 import {SettingDialog} from './SettingDialog';
+import 'hls.js'
+
+import {urlWithSlash} from './url';
 
 const HostStream: unique symbol = Symbol('mystream');
 
@@ -57,7 +62,7 @@ export const Room = ({
     state,
     share,
     stopShare,
-    setName,
+    setName
 }: {
     state: ConnectedRoom;
     share: () => void;
@@ -74,6 +79,7 @@ export const Room = ({
     const [videoElement, setVideoElement] = React.useState<FullScreenHTMLVideoElement | null>(null);
     const audioElementRef = React.useRef<HTMLAudioElement | null>(null);
     const [playingAudio, setPlayingAudio] = React.useState(false);
+    const [playLive, setPlayLive] = React.useState(false);
 
     useShowOnMouseMovement(setShowControl);
 
@@ -154,6 +160,14 @@ export const Room = ({
             pauseAudio();
         } else {
             playAudio();
+        }
+    }
+
+    const toggleLive = () => {
+        if (playLive) {
+            setPlayLive(false);
+        } else {
+            setPlayLive(true);
         }
     }
 
@@ -244,7 +258,7 @@ export const Room = ({
                     className={videoClasses()}
                     onDoubleClick={handleFullscreen}
                 />
-            ) : (
+            ) : !playLive ? (
                 <Typography
                     variant="h4"
                     align="center"
@@ -258,19 +272,30 @@ export const Room = ({
                 >
                     没有可用的流
                 </Typography>
+            ) :  <div></div>
+            }
+            {playLive && (
+                <ReactPlayer url={`${urlWithSlash}hls/${settings.code}.m3u8`}
+                             playing
+                             width='100%'
+                             height='100%'
+                             controls
+                             config={{
+                                 file: {
+                                     forceHLS: true,
+                                 }
+                             }}
+                ></ReactPlayer>
             )}
 
             {audioStream && (
-                <audio
-                    ref={audioElementRef}
-                    style={{ display: 'none' }}
-                />
+                <audio ref={audioElementRef} style={{ display: 'none' }}/>
             )}
 
             {controlVisible && (
                 <Paper className={classes.control} elevation={10} {...setHoverState}>
                     {state.hostStream ? (
-                        <Tooltip title="Cancel Presentation" arrow>
+                        <Tooltip title="取消演示" arrow>
                             <IconButton onClick={stopShare} size="large">
                                 <CancelPresentationIcon fontSize="large" />
                             </IconButton>
@@ -324,6 +349,12 @@ export const Room = ({
                     <Tooltip title="设置" arrow>
                         <IconButton onClick={() => setOpen(true)} size="large">
                             <SettingsIcon fontSize="large" />
+                        </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title="观看直播" arrow>
+                        <IconButton onClick={() => toggleLive()} size="large">
+                            <AspectRatio fontSize="large" />
                         </IconButton>
                     </Tooltip>
                 </Paper>

@@ -45,7 +45,7 @@ export const SettingDialog = ({open, setOpen, updateName, saveSettings}: Setting
         setOpen(false);
     };
 
-    const {name, preferCodec, displayMode, framerate} = settingsInput;
+    const {name, preferCodec, displayMode, framerate, code} = settingsInput;
 
     return (
         <Dialog open={open} onClose={() => setOpen(false)} maxWidth={'xs'} fullWidth>
@@ -108,6 +108,17 @@ export const SettingDialog = ({open, setOpen, updateName, saveSettings}: Setting
                             min={1}
                             onChange={(framerate) => setSettingsInput((c) => ({...c, framerate}))}
                             value={framerate}
+                            fullWidth
+                        />
+                    </Box>
+                    <Box paddingTop={1}>
+                        <TextField
+                            margin="dense"
+                            label="推流码"
+                            value={code}
+                            onChange={(e) =>
+                                setSettingsInput((c) => ({...c, code: e.target.value}))
+                            }
                             fullWidth
                         />
                     </Box>

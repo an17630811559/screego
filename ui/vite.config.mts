@@ -12,6 +12,11 @@ export default defineConfig({
                 target: 'http://localhost:5050',
                 ws: true,
             },
+            '/hls': {
+                target: 'https://screen.anwb.top',
+                changeOrigin: true, //是否跨域
+                rewrite: (path: any) => path.replace(/^\//, "/")
+            },
         },
     },
     build: {outDir: 'build/'},

@@ -38,6 +38,7 @@ export interface Settings {
     displayMode: VideoDisplayMode;
     preferCodec?: PreferredCodec;
     framerate: number;
+    code?: string;
 }
 export interface PreferredCodec {
     mimeType: string;
@@ -59,12 +60,14 @@ export const loadSettings = (): Settings => {
     const defaults: Settings = {
         displayMode: VideoDisplayMode.FitToWindow,
         framerate: 30,
+        code: 'awb',
     };
 
     if (settings && typeof settings === 'object') {
         return {
             name: settings.name?.toString(),
             framerate: settings.framerate ?? defaults.framerate,
+            code: settings.code ?? defaults.code,
             displayMode:
                 Object.values(VideoDisplayMode).find((mode) => mode === settings.displayMode) ??
                 defaults.displayMode,
