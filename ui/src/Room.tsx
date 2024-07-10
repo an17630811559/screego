@@ -17,7 +17,7 @@ import {useSnackbar} from 'notistack';
 import {RoomUser} from './message';
 import {useSettings, VideoDisplayMode} from './settings';
 import {SettingDialog} from './SettingDialog';
-import 'hls.js'
+
 
 import {urlWithSlash} from './url';
 
@@ -233,7 +233,7 @@ export const Room = ({
                 return `${classes.video} ${classes.videoWindowHeight}`;
         }
     };
-
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     return (
         <div className={classes.videoContainer}>
             {controlVisible && (
@@ -274,17 +274,20 @@ export const Room = ({
                 </Typography>
             ) :  <div></div>
             }
+
             {playLive && (
-                <ReactPlayer url={`${urlWithSlash}hls/${settings.code}.m3u8`}
-                             playing
-                             width='100%'
-                             height='100%'
-                             controls
-                             config={{
-                                 file: {
-                                     forceHLS: true,
-                                 }
-                             }}
+                <ReactPlayer
+                    url={`${urlWithSlash}hls/${settings.code}.m3u8`}
+                    playing
+                    width='100%'
+                    height='100%'
+                    controls
+                    config={{
+                        file: {
+                            forceHLS: !isSafari,
+                            forceVideo: true,
+                        }
+                    }}
                 ></ReactPlayer>
             )}
 

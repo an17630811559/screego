@@ -117,9 +117,9 @@ export const RoomManage = ({room, config}: {room: FCreateRoom; config: UseConfig
                     )}
                 </Paper>
             </Grid>
-            <div style={{position: 'absolute', margin: '0 auto', bottom: 0}}>
-                <span style={{fontSize: '15px'}}>汉化、增加音频共享: AWB</span>
-                {'  '} | Screego {config.version}
+            <div style={{position: 'absolute', margin: '0 auto', bottom: 0, textAlign: 'center'}}>
+                <div style={{fontSize: '12px'}}>更改者:AWB</div>
+                <div>Screego {config.version}</div>
             </div>
         </Grid>
     );

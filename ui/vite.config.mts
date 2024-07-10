@@ -9,7 +9,7 @@ export default defineConfig({
         open: false,
         proxy: {
             '^/(config|logout|login|stream)$': {
-                target: 'http://localhost:5050',
+                target: 'http://45.136.14.6:5050',
                 ws: true,
             },
             '/hls': {
