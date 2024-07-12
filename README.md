@@ -1,3 +1,5 @@
+go build -ldflags "-X main.version=$(git describe --tags HEAD) -X main.mode=prod" -o screego ./main.go
+
 <p align="center">
     <a href="https://screego.net">
         <img src="docs/logo.png" />

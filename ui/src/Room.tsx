@@ -10,7 +10,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AspectRatio from '@mui/icons-material/AspectRatio';
 import {useHotkeys} from 'react-hotkeys-hook';
 import {Video} from './Video';
-import ReactPlayer from 'react-player'
+import {FlvPlayer} from './FlvPlayer';
 import makeStyles from '@mui/styles/makeStyles';
 import {ConnectedRoom} from './useRoom';
 import {useSnackbar} from 'notistack';
@@ -163,12 +163,8 @@ export const Room = ({
         }
     }
 
-    const toggleLive = () => {
-        if (playLive) {
-            setPlayLive(false);
-        } else {
-            setPlayLive(true);
-        }
+    const toggleLive = (flag: boolean) => {
+        setPlayLive(flag);
     }
 
     const audioButtonVisible = audioStream && selectedStream !== HostStream;
@@ -233,7 +229,6 @@ export const Room = ({
                 return `${classes.video} ${classes.videoWindowHeight}`;
         }
     };
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     return (
         <div className={classes.videoContainer}>
             {controlVisible && (
@@ -276,19 +271,7 @@ export const Room = ({
             }
 
             {playLive && (
-                <ReactPlayer
-                    url={`${urlWithSlash}hls/${settings.code}.m3u8`}
-                    playing
-                    width='100%'
-                    height='100%'
-                    controls
-                    config={{
-                        file: {
-                            forceHLS: !isSafari,
-                            forceVideo: true,
-                        }
-                    }}
-                ></ReactPlayer>
+                <FlvPlayer url={`${urlWithSlash}live?port=8890&app=live&stream=${settings.code}`} />
             )}
 
             {audioStream && (
@@ -355,11 +338,20 @@ export const Room = ({
                         </IconButton>
                     </Tooltip>
 
-                    <Tooltip title="观看直播" arrow>
-                        <IconButton onClick={() => toggleLive()} size="large">
-                            <AspectRatio fontSize="large" />
-                        </IconButton>
-                    </Tooltip>
+
+                    {playLive ? (
+                        <Tooltip title="取消直播" arrow>
+                            <IconButton onClick={() => toggleLive(false)} size="large">
+                                <CancelPresentationIcon fontSize="large" />
+                            </IconButton>
+                        </Tooltip>
+                    ) : (
+                        <Tooltip title="观看直播" arrow>
+                            <IconButton onClick={() => toggleLive(true)} size="large">
+                                <AspectRatio fontSize="large" />
+                            </IconButton>
+                        </Tooltip>
+                    )}
                 </Paper>
             )}
 
@@ -450,6 +442,7 @@ const useShowOnMouseMovement = (doShow: (s: boolean) => void) => {
         []
     );
 };
+
 
 const useStyles = makeStyles((theme: Theme) => ({
     title: {
