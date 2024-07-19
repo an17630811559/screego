@@ -243,7 +243,7 @@ export const Room = ({
                 return `${classes.video} ${classes.videoWindowHeight}`;
         }
     };
-    //const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     return (
         <div className={classes.videoContainer}>
@@ -293,11 +293,9 @@ export const Room = ({
                     width='100%'
                     height='100%'
                     controls
-                    pip
                     config={{
                         file: {
-                            forceHLS: true,
-                            forceSafariHLS: false,
+                            forceHLS: !isSafari,
                             forceVideo: true,
                         }
                     }}
