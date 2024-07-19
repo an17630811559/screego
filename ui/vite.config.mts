@@ -12,15 +12,15 @@ export default defineConfig({
                 target: 'http://45.136.14.6:5050',
                 ws: true,
             },
-            '/get_live': {
+            '/live-api': {
                 target: 'http://127.0.0.1:12345',
                 changeOrigin: true, //是否跨域
-                rewrite: (path: any) => path.replace(/^\//, "/"),
-               /* bypass(req: any, res: any, options: any) {
+                rewrite: (path: any) => path.replace(/^\/live-api/, ""),
+                /*bypass(req: any, res: any, options: any) {
                     res = res;
                     const proxyURL = options.target + options.rewrite(req.url);
                     console.log('proxyURL', proxyURL);
-                },*/
+                }*/
             },
         },
     },
