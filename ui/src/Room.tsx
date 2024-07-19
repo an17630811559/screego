@@ -165,7 +165,7 @@ export const Room = ({
 
     const toggleLive = async (flag: boolean) => {
         if(flag){
-            const result = await fetch(`${urlWithSlash}live-api/get_live?roomid=${settings.code}`, {method: 'GET'});
+            const result = await fetch(`${urlWithSlash}live-api/get_live?roomid=${settings.code?.trim()}`, {method: 'GET'});
             const json = await result.json();
             if (result.status !== 200) {
                 enqueueSnackbar('获取直播地址失败 ', {variant: 'error'});
