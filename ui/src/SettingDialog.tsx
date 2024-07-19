@@ -114,7 +114,7 @@ export const SettingDialog = ({open, setOpen, updateName, saveSettings}: Setting
                     <Box paddingTop={1}>
                         <TextField
                             margin="dense"
-                            label="推流码"
+                            label="房间号"
                             value={code}
                             onChange={(e) =>
                                 setSettingsInput((c) => ({...c, code: e.target.value}))

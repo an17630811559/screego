@@ -12,8 +12,8 @@ export default defineConfig({
                 target: 'http://45.136.14.6:5050',
                 ws: true,
             },
-            '/live': {
-                target: 'https://screen.anwb.top',
+            '/get_live': {
+                target: 'http://127.0.0.1:12345',
                 changeOrigin: true, //是否跨域
                 rewrite: (path: any) => path.replace(/^\//, "/"),
                /* bypass(req: any, res: any, options: any) {

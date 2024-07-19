@@ -60,7 +60,7 @@ export const loadSettings = (): Settings => {
     const defaults: Settings = {
         displayMode: VideoDisplayMode.FitToWindow,
         framerate: 30,
-        code: 'awb',
+        code: '',
     };
 
     if (settings && typeof settings === 'object') {

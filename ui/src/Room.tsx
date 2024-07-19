@@ -10,14 +10,13 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AspectRatio from '@mui/icons-material/AspectRatio';
 import {useHotkeys} from 'react-hotkeys-hook';
 import {Video} from './Video';
-import {FlvPlayer} from './FlvPlayer';
 import makeStyles from '@mui/styles/makeStyles';
 import {ConnectedRoom} from './useRoom';
 import {useSnackbar} from 'notistack';
 import {RoomUser} from './message';
 import {useSettings, VideoDisplayMode} from './settings';
 import {SettingDialog} from './SettingDialog';
-
+import ReactPlayer from 'react-player'
 
 import {urlWithSlash} from './url';
 
@@ -80,6 +79,7 @@ export const Room = ({
     const audioElementRef = React.useRef<HTMLAudioElement | null>(null);
     const [playingAudio, setPlayingAudio] = React.useState(false);
     const [playLive, setPlayLive] = React.useState(false);
+    const [playLiveUrl, setPlayLiveUrl] = React.useState([]);
 
     useShowOnMouseMovement(setShowControl);
 
@@ -163,7 +163,21 @@ export const Room = ({
         }
     }
 
-    const toggleLive = (flag: boolean) => {
+    const toggleLive = async (flag: boolean) => {
+        if(flag){
+            const result = await fetch(`${urlWithSlash}get_live?roomid=${settings.code}`, {method: 'GET'});
+            const json = await result.json();
+            if (result.status !== 200) {
+                enqueueSnackbar('获取直播地址失败 ', {variant: 'error'});
+            } else {
+                if(!json.data || json.data.length == 0){
+                    enqueueSnackbar('未获取到直播地址,请检查是否开播 ', {variant: 'error'});
+                }else{
+                    let rand = Math.floor(Math.random() * json.data.length);
+                    setPlayLiveUrl(json.data[rand])
+                }
+            }
+        }
         setPlayLive(flag);
     }
 
@@ -229,6 +243,8 @@ export const Room = ({
                 return `${classes.video} ${classes.videoWindowHeight}`;
         }
     };
+    //const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
     return (
         <div className={classes.videoContainer}>
             {controlVisible && (
@@ -271,7 +287,21 @@ export const Room = ({
             }
 
             {playLive && (
-                <FlvPlayer url={`${urlWithSlash}live?port=8890&app=live&stream=${settings.code}`} />
+                <ReactPlayer
+                    url={playLiveUrl}
+                    playing
+                    width='100%'
+                    height='100%'
+                    controls
+                    pip
+                    config={{
+                        file: {
+                            forceHLS: true,
+                            forceSafariHLS: false,
+                            forceVideo: true,
+                        }
+                    }}
+                ></ReactPlayer>
             )}
 
             {audioStream && (
