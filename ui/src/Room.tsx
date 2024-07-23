@@ -25,7 +25,7 @@ const HostStream: unique symbol = Symbol('mystream');
 const flags = (user: RoomUser) => {
     const result: string[] = [];
     if (user.you) {
-        result.push('You');
+        result.push('你');
     }
     if (user.owner) {
         result.push('Owner');
@@ -175,10 +175,12 @@ export const Room = ({
                 }else{
                     let rand = Math.floor(Math.random() * json.data.length);
                     setPlayLiveUrl(json.data[rand])
+                    setPlayLive(flag);
                 }
             }
+        }else{
+            setPlayLive(flag);
         }
-        setPlayLive(flag);
     }
 
     const audioButtonVisible = audioStream && selectedStream !== HostStream;

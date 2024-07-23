@@ -8,6 +8,7 @@ import {
     Button,
     Autocomplete,
     Box,
+    Chip,
 } from '@mui/material';
 import {
     CodecBestQuality,
@@ -121,6 +122,14 @@ export const SettingDialog = ({open, setOpen, updateName, saveSettings}: Setting
                             }
                             fullWidth
                         />
+                        <Chip label="文博" variant="outlined" clickable onClick={() => {
+                            setSettingsInput((c) => ({...c, code: '30084190'}))
+                        }}>
+                        </Chip>
+                        <Chip label="潇潇" variant="outlined" clickable style={{marginLeft: '10px'}} onClick={() => {
+                            setSettingsInput((c) => ({...c, code: '30084785'}))
+                        }}>
+                        </Chip>
                     </Box>
                 </form>
             </DialogContent>
